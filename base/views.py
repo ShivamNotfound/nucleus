@@ -32,3 +32,11 @@ def altertask(request,id):
     
     form=TaskForm(instance=task)
     return render(request,'base/createtask.html',{'form':form})
+
+def deletetask(request,id):
+    if request.method=='POST':
+        task=Task.objects.get(id=id)
+        task.delete()
+        return redirect('home')
+        
+    return render(request,'base/deletetask.html')
