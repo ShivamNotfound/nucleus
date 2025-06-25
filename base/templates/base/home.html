@@ -4,7 +4,7 @@
 <h1>Task</h1>
 <div>
 {% for task in tasks %}
-    <div>{{task.name}}</div>
+    <div>{{task.name}} <a href="{% url 'altertask' task.id %}">change</a></div>
 {% endfor %}
 </div>
 <a href="{% url 'add-task' %}">
