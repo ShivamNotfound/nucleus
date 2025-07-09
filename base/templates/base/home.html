@@ -1,12 +1,55 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<h1>Task</h1>
+<h1>Today's Task</h1>
+
 <div>
-{% for task in tasks %}
-    <div>{{task.name}} <a href="{% url 'altertask' task.id %}">change</a> <a href="{% url 'delete-task' task.id %}">delete</a></div>
+{% for task in today_tasks %}
+    <div>{{task.name}} 
+        <a href="{% url 'altertask' task.id %}">change</a> 
+        <a href="{% url 'delete-task' task.id %}">delete</a>
+        <form method="POST">
+            {% csrf_token %}
+            <input name="id" value="{{task.id}}" style="display:none">
+            <button type="submit">complete</button>
+        </form>
+    </div>
+{% empty %}
+<p>No tasks left here</p>
 {% endfor %}
 </div>
+
+<h1>Unscheduled Tasks</h1>
+
+<div>
+{% for task in unscheduled_tasks %}
+    <div>{{task.name}} 
+        <a href="{% url 'altertask' task.id %}">change</a> 
+        <a href="{% url 'delete-task' task.id %}">delete</a>
+        <form method="POST">
+            {% csrf_token %}
+            <input name="id" value="{{task.id}}" style="display:none">
+            <button type="submit">complete</button>
+        </form>
+    </div>
+{% empty %}
+<p>No tasks here</p>
+
+{% endfor %}
+
+</div>
+
+<h1>Completed</h1>
+<div>
+    {% for task in completed_today %}
+        <div>
+            {{task.name}}
+        </div>
+    {% empty %}
+        <p>Empty</p>
+    {% endfor %}
+</div>
+
 <a href="{% url 'add-task' %}">
     Add Task
 </a>

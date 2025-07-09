@@ -3,11 +3,21 @@ from .models import Task
 from .forms import TaskForm
 from django.contrib.auth import logout,login,authenticate
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 def home(request):
     #shows all the tasks
-    tasks=Task.objects.filter(user=request.user)
-    return render(request,'home.html',{'tasks':tasks})
+    if request.method=='POST':
+        task=Task.objects.get(id=request.POST['id'])
+        task.status='completed'
+        task.save()
+
+    completed_today=Task.objects.filter(scheduled_date=timezone.now(),user=request.user,status='completed')
+    today_tasks=Task.objects.filter(scheduled_date=timezone.now(),user=request.user,status='pending')
+    unscheduled_tasks=Task.objects.filter(user=request.user,scheduled_date=None,status='pending')
+
+    context={'today_tasks':today_tasks,'unscheduled_tasks':unscheduled_tasks,'completed_today':completed_today}
+    return render(request,'home.html',context)
 
 def addtask(request):
 
