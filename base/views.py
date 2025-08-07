@@ -4,19 +4,22 @@ from .forms import TaskForm
 from django.contrib.auth import logout,login,authenticate
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import timedelta,datetime
+from time import strftime
 
 def home(request):
     #shows all the tasks
     if request.method=='POST':
         task=Task.objects.get(id=request.POST['id'])
         task.status='completed'
+        task.completed_date=timezone.now()
         task.save()
-
-    completed_today=Task.objects.filter(scheduled_date=timezone.now(),user=request.user,status='completed')
+    time=timezone.now()+timedelta(days=1)
+    completed_today=Task.objects.filter(completed_date=timezone.now(),user=request.user,status='completed')
     today_tasks=Task.objects.filter(scheduled_date=timezone.now(),user=request.user,status='pending')
     unscheduled_tasks=Task.objects.filter(user=request.user,scheduled_date=None,status='pending')
 
-    context={'today_tasks':today_tasks,'unscheduled_tasks':unscheduled_tasks,'completed_today':completed_today}
+    context={'today_tasks':today_tasks,'unscheduled_tasks':unscheduled_tasks,'completed_today':completed_today,'time':time}
     return render(request,'home.html',context)
 
 def addtask(request):
@@ -31,6 +34,7 @@ def addtask(request):
 
 
     form=TaskForm()
+    
     return render(request,'base/createtask.html',{'form':form})
 
 def altertask(request,id):
@@ -78,3 +82,17 @@ def logoutuser(request):
 
     logout(request)
     return redirect('login')
+
+
+def prev_hist(request,date):
+    date=datetime.strptime(date[:date.index('.') if "." in date else len(date)],"%Y-%m-%d %H:%M:%S")-timedelta(days=1)
+    completed=Task.objects.filter(completed_date=date,status="completed")
+    not_completed=Task.objects.filter(scheduled_date=date,status="pending")
+    return render(request,'history.html',{'date':date,"completed":completed,"not":not_completed})
+
+def succ_hist(request,date):
+    
+    date=datetime.strptime(date[:date.index('.') if "." in date else len(date)],"%Y-%m-%d %H:%M:%S")+timedelta(days=1)
+    completed=Task.objects.filter(completed_date=date,status="completed")
+    not_completed=Task.objects.filter(scheduled_date=date,status="pending")
+    return render(request,'history.html',{'date':date,"completed":completed,"not":not_completed})

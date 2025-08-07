@@ -9,3 +9,5 @@ class Task(models.Model):
     scheduled_date=models.DateField(null=True,blank=True)
     description=models.TextField(max_length=200,null=True,blank=True)
     status=models.CharField(max_length=10,null=True,blank=True,default='pending')
+    completed_date=models.DateField(null=True,blank=True)
+    

@@ -1,6 +1,7 @@
 {% extends 'main.html' %}
 
 {% block content %}
+<a href="{% url 'prev_hist' time %}">history</a>
 <h1>Today's Task</h1>
 
 <div>
@@ -51,6 +52,6 @@
 </div>
 
 <a href="{% url 'add-task' %}">
-    Add Task
+    <h1>Add Task</h1>
 </a>
 {% endblock %}

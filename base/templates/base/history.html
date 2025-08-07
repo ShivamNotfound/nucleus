@@ -1,0 +1,22 @@
+
+{% extends 'main.html' %}
+
+
+{% block content %}
+
+<h1>{{date}}</h1>
+
+<hr>
+<h2>Completed Tasks:</h2>
+{% for task in completed %}
+    <p>{{task.name}}</p>
+{% endfor %}
+<hr>
+<h2>Leftovers:</h2>
+{% for task in not %}
+    <p>{{task.name}}</p> 
+{% endfor %}
+
+<a href="{% url 'prev_hist' date %}">previous</a>
+<a href="{% url 'succ_hist' date %}">next</a>
+{% endblock %}

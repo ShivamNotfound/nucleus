@@ -7,4 +7,6 @@ urlpatterns=[path('',views.home,name='home'),
              path('DeleteTask/<int:id>',views.deletetask,name='delete-task'),
              path('login/',views.loginuser,name='login'),
              path('signup/',views.signupuser,name='sign-up'),
-             path('logout/',views.logoutuser,name='logout')]
+             path('logout/',views.logoutuser,name='logout'),
+             path("prev_history/<str:date>/",views.prev_hist,name='prev_hist'),
+             path("history/<str:date>/",views.succ_hist,name='succ_hist')]
