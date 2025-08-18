@@ -11,3 +11,6 @@ class Task(models.Model):
     status=models.CharField(max_length=10,null=True,blank=True,default='pending')
     completed_date=models.DateField(null=True,blank=True)
     default=models.BooleanField(null=True,blank=True)
+    priority_level=models.SmallIntegerField(null=True,blank=True)
+    urgency_level=models.SmallIntegerField(null=True,blank=True)
+  

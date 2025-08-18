@@ -26,7 +26,7 @@ def home(request):
     duplicated=Task.objects.filter(default=True,status="completed",user=request.user,completed_date=timezone.now())
 
     completed_today=Task.objects.filter(completed_date=timezone.now(),user=request.user,status='completed')
-    today_tasks=Task.objects.filter(Q(scheduled_date=timezone.now(),user=request.user,status='pending',default__in=[False,None])|(Q(user=request.user,status='pending',default=True)&~Q(name__in=duplicated.values_list('name'))))
+    today_tasks=Task.objects.filter(Q(scheduled_date=timezone.now(),user=request.user,status='pending',default__in=[False,None])|(Q(user=request.user,status='pending',default=True)&~Q(name__in=duplicated.values_list('name')))).order_by("-priority_level","-urgency_level")
     unscheduled_tasks=Task.objects.filter(user=request.user,scheduled_date=None,status='pending',default=False)
 
     context={'today_tasks':today_tasks,'unscheduled_tasks':unscheduled_tasks,'completed_today':completed_today,'time':time}
